@@ -274,3 +274,6 @@ select.pg-input-sm { appearance: none; -webkit-appearance: none; background-imag
   .pg-split-bar { height: 22px; }
   .pg-split, .pg-sim, .pg-panel { padding: 16px; }
 }
+
+.pg-cta-2 { background: var(--ink); color: var(--paper); }
+.pg-header { flex-wrap: nowrap; }

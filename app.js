@@ -7,6 +7,7 @@ const $ = (id) => document.getElementById(id);
 const SPLIT = { holders: 0.675, desks: 0.10, burn: 0.10, protocol: 0.125 };
 const OTC_MINT = "MukLDtJ8Cx9DxLbeyLRSWPSposTMWuwHANbuaudpump";
 const FEED = "https://otcdesks.cash/api/rewards";
+const PROG_MINT = null; // set on explicit operator link, after on-chain verification
 const LIVE = false; // flip to true once otcdesks.cash sends Access-Control-Allow-Origin on /api — until then the live call is blocked by the browser
 
 let D = null;           // snapshot
@@ -224,10 +225,11 @@ async function boot() {
   const [snap, sol] = await Promise.all([fetch("./data/live.json", { cache: "no-cache" }).then((r) => r.json()), price("So11111111111111111111111111111111111111112")]);
   D = snap; solUsd = sol;
   renderHero(); renderChart(); renderLists(); sim();
-  if (D.prog_mint) {
-    const a = document.createElement("a"); a.href = `https://solscan.io/token/${D.prog_mint}`; a.target = "_blank"; a.rel = "noopener"; a.textContent = D.prog_mint;
+  if (PROG_MINT) {
+    const a = document.createElement("a"); a.href = `https://solscan.io/token/${PROG_MINT}`; a.target = "_blank"; a.rel = "noopener"; a.textContent = PROG_MINT;
     $("progMint").replaceChildren(a);
-    const pill = $("progTokenLink"); pill.href = `https://pump.fun/coin/${D.prog_mint}`; pill.removeAttribute("aria-disabled"); pill.removeAttribute("title"); pill.target = "_blank"; pill.rel = "noopener";
+    const pill = $("progTokenLink"); pill.href = `https://pump.fun/coin/${PROG_MINT}`; pill.removeAttribute("aria-disabled"); pill.removeAttribute("title"); pill.target = "_blank"; pill.rel = "noopener";
+    const buy = $("progBuy"); if (buy) { buy.href = `https://pump.fun/coin/${PROG_MINT}`; buy.hidden = false; }
   }
   setInterval(() => { $("stLast").textContent = D.rewards.last_distributed_at ? ago(D.rewards.last_distributed_at) : "—"; document.querySelectorAll(".pg-tape-when").forEach((el) => { const t = el.title ? Date.parse(el.title.replace(" UTC", "Z").replace(" ", "T")) / 1000 : null; if (t) el.textContent = ago(t); }); }, 30000);
 }
