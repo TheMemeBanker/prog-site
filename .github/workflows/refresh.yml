@@ -1,0 +1,32 @@
+name: refresh snapshot
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pull the public feeds
+        run: python3 scripts/snapshot.py
+      - name: Commit if changed
+        run: |
+          git config user.name "prog-snapshot"
+          git config user.email "snapshot@prog.cash"
+          if git diff --quiet -- data/live.json; then echo "no change"; exit 0; fi
+          git add data/live.json
+          git commit -m "snapshot $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push
