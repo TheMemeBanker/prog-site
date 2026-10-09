@@ -7,7 +7,7 @@ const $ = (id) => document.getElementById(id);
 const SPLIT = { holders: 0.675, desks: 0.10, burn: 0.10, protocol: 0.125 };
 const OTC_MINT = "MukLDtJ8Cx9DxLbeyLRSWPSposTMWuwHANbuaudpump";
 const FEED = "https://otcdesks.cash/api/rewards";
-const PROG_MINT = null; // set on explicit operator link, after on-chain verification
+const PROG_MINT = "BrYs9BT3dRViUa62bwmoDixZcqxyVesFG7fHSXNRpump"; // set on explicit operator link, after on-chain verification
 const LIVE = false; // flip to true once otcdesks.cash sends Access-Control-Allow-Origin on /api — until then the live call is blocked by the browser
 
 let D = null;           // snapshot
